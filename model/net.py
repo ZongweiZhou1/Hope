@@ -48,7 +48,9 @@ class ResGraphNet(nn.Module):
             nn.Linear(F_out, F_out)
         )
 
-    def forward(self, x, edge_index):
+    def forward(self, data):
+        x = data.x
+        edge_index = data.edge_index
         tmp_x = []
         for block in self.block_list:
             x = block(x, edge_index)
@@ -59,7 +61,7 @@ class ResGraphNet(nn.Module):
         return x
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     from torch_geometric.data import Data
 
     x = torch.tensor([[0.3, 0.4, 0.8, 0.1],
@@ -69,6 +71,9 @@ if __name__=='__main__':
     edge_index = torch.tensor([[0, 1, 2, 3], [2, 3, 0, 1]], dtype=torch.long)
     data = Data(x=x, edge_index=edge_index)
     block = ResGraphNet()
-    print(block(data.x, data.edge_index))
+    y = block(data)
+    loss = y.sum()
+    loss.backward()
+    print(y)
 
 

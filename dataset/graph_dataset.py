@@ -23,7 +23,7 @@ def merge_dicts(*dict_args):
     return result
 
 class graph_dataset(Dataset):
-    def __init__(self, subsets=('zara01, hotel, univ'), loss_prob=0.2, add_prob=0.3):
+    def __init__(self, subsets=('zara01, hotel, univ'), loss_prob=0.2, add_prob=0.6):
         super(graph_dataset, self).__init__()
         self.loss_prob = loss_prob
         self.add_prob = add_prob
@@ -59,8 +59,8 @@ class graph_dataset(Dataset):
         grid_x, grid_y = np.meshgrid(np.arange(len(visual_x)), np.arange(len(visual_y)))
         mask = np.eye(len(visual_x)).flatten()
         visual_edge_index = np.stack((grid_x.flatten(), grid_y.flatten()), axis=0)[:, mask==0]
-        visual_x = torch.from_numpy(visual_x)
-        visual_y = torch.from_numpy(visual_y)
+        visual_x = torch.from_numpy(visual_x).float()
+        visual_y = torch.from_numpy(visual_y).long()
         visual_edge_index = torch.from_numpy(visual_edge_index).long()
         visual_graph = Data(x=visual_x, edge_index=visual_edge_index, y=visual_y)
         # for points
@@ -68,8 +68,8 @@ class graph_dataset(Dataset):
         grid_x, grid_y = np.meshgrid(np.arange(len(points_x)), np.arange(len(points_y)))
         mask = np.eye(len(points_x)).flatten()
         points_edge_index = np.stack((grid_x.flatten(), grid_y.flatten()), axis=0)[:, mask==0]
-        points_x = torch.from_numpy(points_x)
-        points_y = torch.from_numpy(points_y)
+        points_x = torch.from_numpy(points_x).float()
+        points_y = torch.from_numpy(points_y).long()
         points_edge_index = torch.from_numpy(points_edge_index).long()
         points_graph = Data(x=points_x, y=points_y, edge_index=points_edge_index)
         return visual_graph, points_graph, key
@@ -91,9 +91,11 @@ if __name__=='__main__':
         print(v[0][0].num_nodes)
         print(v[0][0].num_edges)
         print(v[0][0].num_node_features)
+        print(v[0][0].y)
         print(v[1][0].x)
         print(v[1][0].num_nodes)
         print(v[1][0].num_edges)
         print(v[1][0].num_node_features)
+        print(v[1][0].y)
         print(v[2][0])
         break
