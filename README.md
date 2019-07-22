@@ -34,10 +34,31 @@ block with edgegcn layer. The architecture of each branch is demonstrated as fol
 ![EG](Figs/EdgeGraph.png)
 
 #### Train
+- add your workpalce to the pythonpath
+```buildoutcfg
+export PYTHONPATH=<your/path/to/Hope>:$PYTHONPATH
+```
 
+- open you visdom server to observe the results
+```buildoutcfg
+python -m visdom.server
+```
+
+- train the network
+```buildoutcfg
+python trainval.py --gpu '0' --bs 64
+```
+- if you want to observe both train and validation results
+```buildoutcfg
+python trainval.py --trainval --gpu '0' --bs 64
+```
 
 #### Test
-
+- [] TODO
 
 #### Visualization
+More details about the dataset you can find in `utils/visualize.py`.
 
+The train and valid process you can observe through visdom server, refer to `Train`.
+
+![log](Figs/hope_log.png)
